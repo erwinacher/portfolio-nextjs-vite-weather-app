@@ -1,7 +1,7 @@
 use axum::{Router, routing::get};
 
 async fn app() -> Router {
-    Router::new().route("/", get(|| async { "Hello, world!" }))
+    Router::new().route("/hello", get(|| async { "Hello, world!" }))
 }
 
 #[tokio::main]
@@ -26,7 +26,7 @@ mod tests {
         let app = app().await;
 
         let response = app
-            .oneshot(Request::builder().uri("/").body(Body::empty()).unwrap())
+            .oneshot(Request::builder().uri("/hello").body(Body::empty()).unwrap())
             .await
             .unwrap();
 
