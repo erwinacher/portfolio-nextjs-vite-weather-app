@@ -1,6 +1,5 @@
 # Rust
 target
-Cargo.lock
 **/*.rs.bk
 
 # Git
@@ -13,3 +12,7 @@ Cargo.lock
 *.tmp
 .vscode
 .idea
+
+# misc stuff
+*.log
+*.local

@@ -45,10 +45,11 @@ RUN cargo install cargo-watch
 # cargo manifest
 COPY Cargo.toml Cargo.lock ./
 
-# fetch all the dependencies
+COPY src ./src
+
 RUN cargo fetch
 
-# copy the code
-COPY . .
+# fetch all the dependencies
+RUN cargo fetch
 
 EXPOSE 8000

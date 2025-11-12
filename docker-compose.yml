@@ -33,12 +33,12 @@ services:
     volumes:
       - ./weather-frontend:/app
       # removing this as it breaks the binary build, do not mount node-modules, alpine != pops_os in my case
-      # - /app/node-modules
+      - /app/node_modules
     environment:
       - VITE_API_URL=http://weather-axum-backend:8000
     networks:
       - weather-app-net
-    command: npm run dev -- --host 0.0.0.0
+    command: pnpm run dev -- --host 0.0.0.0
 
 networks:
   weather-app-net:

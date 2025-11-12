@@ -14,7 +14,7 @@ function App() {
   console.log(data?.current.temp);
   return (
     <div className="flex flex-col gap-8">
-      <div>HELLO</div>
+      <div>HELLO5</div>
       <Card title="Current Weather">
         {JSON.stringify(data?.current).slice(0, 100)}
       </Card>

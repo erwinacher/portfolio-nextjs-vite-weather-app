@@ -1,48 +1,22 @@
+# --- Base image: Node 24 (matches nvm use v24)
 FROM node:24-bookworm-slim
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm ci
+# Enable corepack (provides pnpm automatically in Node 16.9+)
+RUN corepack enable
 
+# Copy only package manifests first (for caching)
+COPY package.json pnpm-lock.yaml ./
+
+# Install dependencies (using frozen lockfile)
+RUN pnpm install --frozen-lockfile
+
+# Copy rest of the app
 COPY . .
 
+# Expose Vite dev port
 EXPOSE 5173
 
-# note we need to expose 0.0.0.0 for external access
-#CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
-
-
-# FROM node:24-alpine
-
-# WORKDIR /app
-
-# COPY package.json ./
-
-# RUN npm install
-
-# COPY . .
-
-# EXPOSE 5173
-
-# CMD ["npm", "run", "dev"]
-
-# splitting inti build and serve
-# Error: Cannot find module '../lightningcss.linux-x64-musl.node' -> happenning in Alpine
-# https://github.com/tailwindlabs/tailwindcss/issues/17958
-
-# # build stage
-# FROM node:24-bookworm-slim as builder
-# WORKDIR /app
-# COPY package*.json ./
-# RUN npm ci
-# COPY . .
-# RUN npm run build
-
-# # serve stage
-# FROM nginx:alpine
-# COPY --from=builder /app/dist /usr/share/nginx/html
-# EXPOSE 80
-# CMD ["nginx", "-g", "daemon off;"]
-
-
+# Run the Vite dev server
+CMD ["pnpm", "run", "dev", "--", "--host", "0.0.0.0"]
