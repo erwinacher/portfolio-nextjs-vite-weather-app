@@ -1,0 +1,45 @@
+services:
+  weather-axum-backend:
+    build:
+      context: ./weather-axum-backend
+      dockerfile: Dockerfile.dev
+    container_name: weather-axum-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./weather-axum-backend:/app
+    environment:
+      - RUST_LOG=info
+    networks:
+      - weather-app-net
+    command: cargo watch -x run
+
+  weather-fastapi-backend:
+    build: ./weather-fastapi-backend
+    container_name: weather-fastapi-backend
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./weather-fastapi-backend:/app
+    networks:
+      - weather-app-net
+    command: uv run uvicorn main:app --host 0.0.0.0 --port 8001 --reload
+
+  frontend:
+    build: ./weather-frontend
+    container_name: weather-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./weather-frontend:/app
+      # removing this as it breaks the binary build, do not mount node-modules, alpine != pops_os in my case
+      # - /app/node-modules
+    environment:
+      - VITE_API_URL=http://weather-axum-backend:8000
+    networks:
+      - weather-app-net
+    command: npm run dev -- --host 0.0.0.0
+
+networks:
+  weather-app-net:
+    driver: bridge

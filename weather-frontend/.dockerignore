@@ -1,0 +1,15 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build output
+dist/
+.cache/
+
+# Git / editor
+.git
+.gitignore
+.vscode
+.idea
+.DS_Store

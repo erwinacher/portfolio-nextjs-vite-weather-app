@@ -1,0 +1,54 @@
+# # using docker build
+# FROM rust:1.90 as builder
+
+# WORKDIR /app
+
+# COPY . .
+
+# RUN cargo build --release
+
+# # ---------
+
+# FROM debian:bookworm-slim
+
+# WORKDIR /app
+
+# COPY --from=builder /app/target/release/weather-backend /app/weather-backend
+
+# EXPOSE 8000
+
+
+
+# # development build
+# FROM rust:1.90
+
+# WORKDIR /app
+
+# RUN cargo install cargo-watch
+
+# COPY . .
+
+# EXPOSE 8000
+
+# # run using watch for hot reload on change
+# CMD ["cargo", "watch", "-x", "run"]
+
+
+# dev image
+FROM rust:1.90 as dev
+
+WORKDIR /app
+
+# install this once
+RUN cargo install cargo-watch
+
+# cargo manifest
+COPY Cargo.toml Cargo.lock ./
+
+# fetch all the dependencies
+RUN cargo fetch
+
+# copy the code
+COPY . .
+
+EXPOSE 8000
