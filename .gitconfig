@@ -1,0 +1,2 @@
+[alias]
+cm = "!f(){ git commit -m \"$1\" -m \"- $(date '+%Y-%m-%d %H:%M')\"; }; f"
