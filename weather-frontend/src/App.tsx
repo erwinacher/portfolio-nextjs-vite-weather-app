@@ -3,6 +3,7 @@ import { getWeather } from "./api";
 import type { WeatherResponse } from "./schemas/weatherSchema";
 import Card from "./components/cards/Card";
 import DailyForecast from "./components/cards/DailyForecast";
+import HourlyForecast from "./components/cards/HourlyForecast";
 
 function App() {
   const { data } = useSuspenseQuery<WeatherResponse>({
@@ -16,9 +17,8 @@ function App() {
       <Card title="Current Weather">
         {JSON.stringify(data?.current).slice(0, 100)}
       </Card>
-      <Card title="Hourly Forecast (48 Hours)">
-        {JSON.stringify(data?.hourly).slice(0, 100)}
-      </Card>
+
+      <HourlyForecast />
       <DailyForecast />
     </div>
   );
